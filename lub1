@@ -1,0 +1,74 @@
+#include <iostream>
+#include <time.h>
+using namespace std;
+
+int main()
+{
+	int m, n;
+
+	srand(time(NULL));
+	setlocale(LC_ALL, "RU");
+
+	cout << "введите размерность массива: ";
+	cin >> m >> n;
+	int** a =new int* [m];//создаем изначальную двумерную матрицу
+	for (int i = 0; i < m; i++)
+	{
+		*(a+i) = new int[n];
+	}
+	cout << '\n' << "изначальная матрица: " << '\n';
+	for (int i = 0; i < m; i++)//заполняем и выводим эту матрицу
+	{
+		for (int j = 0; j < n; j++)
+		{
+			*(*(a+i)+j) = rand()%100;
+			cout << *(*(a + i) + j) << "\t";
+		}
+		cout << '\n';
+	}
+
+	int* min = new int[m];
+	for (int i = 0; i < m; i++)//создаем и заполняем массив, в котором содержатся минимальные элементы
+	{
+		*(min + i) = **(a+i);
+		for (int j=1; j < n; j++)
+		{
+			if (*(*(a + i) + j) < *(min + i)) *(min + i) = *(*(a + i) + j);
+		}
+	}
+
+	cout << '\n';
+	cout << "минимальный элемент в каждой строке: " << '\n';
+	for (int i = 0; i < m; i++)
+		cout << *(min + i) << '\t';
+	cout << '\n';
+
+	for (int i = 0; i < m; i++)// сортируем оба массива
+	{
+		for (int j = 0; j < m - i - 1; j++)
+			if (*(min + j) > *(min + j + 1))
+			{
+				swap(*(min+j), *(min+j+1));
+				for (int k = 0; k < n; k++)
+					swap(*(*(a+j)+k), *(*(a+j+1)+k));
+			}
+	}
+
+	cout << '\n';
+	cout << "отсортированные минимальные элементы из каждой строки: " << '\n';
+	for (int i = 0; i < m; i++)
+		cout << *(min + i) << '\t';
+
+	cout << '\n';
+	cout << '\n';
+	cout << "отсортированная матрица: " << '\n';
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			cout << *(*(a+i)+j) << "\t";
+		}
+		cout << '\n';
+	}
+	return 0;
+}
